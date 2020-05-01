@@ -32,6 +32,9 @@ ALL_SERVICES="$ALL_SERVICES security-proxy"
 
 DB_SERVICES=(core-command core-data core-metadata support-notifications support-scheduler)
 
+# kuiper
+ALL_SERVICES="$ALL_SERVICES kuiper"
+
 # handle_svc will either turn a service off or on and set the associated
 # config item
 # first arg is the service, second is the state to put it in
@@ -91,6 +94,16 @@ for key in $ALL_SERVICES; do
             # handle the service too
             handle_svc "$key" "$status"
             ;;
+        kuiper)
+            # if we are turning kuiper on, make sure
+            # app-service-configurable is on too
+            if [ "$status" = "on" ]; then
+                handle_svc "app-service-configurable" "on"
+                handle_svc "support-rulesengine" "off"
+            fi
+            # handle the service too
+            handle_svc "$key" "$status"
+            ;;
         security-proxy-setup|security-secretstore-setup)
             # it doesn't make any sense to disable the *-worker daemons since 
             # they are just oneshot daemons that run after other daemons, so
@@ -136,6 +149,7 @@ for key in $ALL_SERVICES; do
             # app-service-configurable is on too
             if [ "$status" = "on" ]; then
                 handle_svc "app-service-configurable" "on"
+                handle_svc "kuiper" "off"
             fi
             # handle the service too
             handle_svc "$key" "$status"
