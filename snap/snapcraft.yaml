@@ -696,8 +696,7 @@ parts:
     make-install-var: PREFIX
   edgex-mongo:
     source: https://github.com/edgexfoundry/docker-edgex-mongo.git
-    # TODO (geneva): pin this to a commit or tag for release
-    source-branch: master
+    source-tag: v1.1.0
     source-depth: 1
     plugin: make
     after: [go113]
@@ -711,8 +710,8 @@ parts:
       install -d "$SNAPCRAFT_PART_INSTALL/config/edgex-mongo/res/"
 
       cat "./cmd/res/configuration.toml" | \
-        sed -e "s@TokenFile = \"/vault/config/assets/resp-init.json\"@TokenFile = \"\$SNAP_DATA/secrets/edgex-mongo/secrets-token.json\"@" \
-            -e "s@RootCaCertPath = \"/vault/config/pki/EdgeXFoundryCA/EdgeXFoundryCA.pem\"@RootCaCertPath = \"\$SNAP_DATA/pki/EdgeXFoundryCA/EdgeXFoundryCA.pem\"@" \
+        sed -e "s@TokenPath = \"/vault/config/assets/resp-init.json\"@TokenFile = \"\$SNAP_DATA/secrets/edgex-mongo/secrets-token.json\"@" \
+            -e "s@CACertPath = \"/vault/config/pki/EdgeXFoundryCA/EdgeXFoundryCA.pem\"@RootCaCertPath = \"\$SNAP_DATA/pki/EdgeXFoundryCA/EdgeXFoundryCA.pem\"@" \
             > \
        "$SNAPCRAFT_PART_INSTALL/config/edgex-mongo/res/configuration.toml"
 
@@ -779,7 +778,7 @@ parts:
 
   support-rulesengine:
     source: https://github.com/edgexfoundry/support-rulesengine.git
-    source-branch: "master"
+    source-tag: v1.1.0
     source-depth: 1
     plugin: maven
     maven-options: ["-Dmaven.test.skip=true"]
@@ -1077,7 +1076,8 @@ parts:
   device-virtual-go:
     source: https://github.com/edgexfoundry/device-virtual-go.git
     source-depth: 1
-    source-branch: master
+    # TODO: update to v1.2.0 rel tag (or latest dev tag)
+    source-tag: v1.2.0-dev.12
     plugin: make
     after: [go113]
     override-build: |
@@ -1101,7 +1101,8 @@ parts:
 
   app-service-config:
     source: https://github.com/edgexfoundry/app-service-configurable.git
-    source-branch: master
+    # TODO: update to v1.2.0 rel tag (or latest dev tag)
+    source-tag: v1.1.0-dev.13
     plugin: make
     build-packages: [gcc, git, libzmq3-dev, pkg-config]
     stage-packages: [libzmq5]
